@@ -1,81 +1,81 @@
 # Retroguide
 
-Assistant conversationnel RAG (Retrieval-Augmented Generation) pour Vintage Store.
-Les documents PDF sont découpés, vectorisés avec `all-MiniLM-L6-v2`, puis indexés dans
-Qdrant. À chaque question, l'assistant récupère le contexte pertinent avant de générer
-une réponse avec GPT-4.1. Il peut aussi appeler des outils métier pour connaître la date
-de mise à jour de documents spécifiques.
+Retrieval-Augmented Generation (RAG) conversational assistant for Vintage Store.
+PDF documents are split into chunks, embedded with `all-MiniLM-L6-v2`, and indexed in
+Qdrant. For each question, the assistant retrieves relevant context before generating a
+response with GPT-4.1. It can also call business tools to retrieve the last-updated date
+of specific documents.
 
-## Prérequis
+## Prerequisites
 
 - Java 21
-- Docker et Docker Compose
-- Une clé API OpenAI dans la variable `OPENAI_API_KEY`
+- Docker and Docker Compose
+- An OpenAI API key in the `OPENAI_API_KEY` environment variable
 
-## Démarrage
+## Getting started
 
-1. Démarrer Qdrant :
+1. Start Qdrant:
 
    ```bash
    docker compose up -d qdrant
    ```
 
-2. Ajouter les PDF à indexer dans le projet, puis lancer l'ingestion :
+2. Add the PDFs to index to the project, then run ingestion:
 
    ```bash
    mvn exec:java -Dexec.mainClass=me.akkhalef.document.DocumentIngestor
    ```
 
-3. Configurer la clé OpenAI et démarrer le chat :
+3. Configure the OpenAI API key and start the chat:
 
    ```bash
    export OPENAI_API_KEY="..."
    mvn exec:java
    ```
 
-   Saisir `quit` pour arrêter l'application.
+   Type `quit` to stop the application.
 
-> L'ingestion parcourt récursivement les fichiers `.pdf` du répertoire du projet et
-> stocke leurs vecteurs dans la collection Qdrant `VintageStoreIndex`.
+> Ingestion recursively scans `.pdf` files from the project directory and stores their
+> vectors in the `VintageStoreIndex` Qdrant collection.
 
-## Séquence RAG avec outil
+## RAG sequence with tools
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Utilisateur
+    actor User
     participant Chat as ChatService
     participant RAG as LangChain4j<br/>ContentRetriever
     participant Embed as all-MiniLM-L6-v2
     participant Qdrant as Qdrant<br/>VintageStoreIndex
     participant LLM as OpenAI GPT-4.1
-    participant Outil as ChatTools
+    participant Tool as ChatTools
 
-    Utilisateur->>Chat: Pose une question
+    User->>Chat: Asks a question
     Chat->>RAG: assistant.chat(question)
-    RAG->>Embed: Vectorise la question
-    Embed-->>RAG: Vecteur de requête
-    RAG->>Qdrant: Recherche de segments similaires (gRPC)
-    Qdrant-->>RAG: Contexte documentaire pertinent
-    RAG->>LLM: Question + contexte + message système
+    RAG->>Embed: Embeds the question
+    Embed-->>RAG: Query vector
+    RAG->>Qdrant: Searches similar segments (gRPC)
+    Qdrant-->>RAG: Relevant document context
+    RAG->>LLM: Question + context + system message
 
-    alt Une date de mise à jour est demandée
-        LLM->>Outil: Appelle l'outil approprié
-        Outil-->>LLM: Date de dernière mise à jour
-        LLM->>LLM: Compose la réponse avec le résultat de l'outil
-    else Aucune information d'outil nécessaire
-        LLM->>LLM: Compose la réponse avec le contexte RAG
+    alt A document's last-updated date is requested
+        LLM->>Tool: Calls the appropriate tool
+        Tool-->>LLM: Last-updated date
+        LLM->>LLM: Composes the response with the tool result
+    else No tool information is needed
+        LLM->>LLM: Composes the response with RAG context
     end
 
-    LLM-->>Chat: Réponse finale
-    Chat-->>Utilisateur: Affiche la réponse
+    LLM-->>Chat: Final response
+    Chat-->>User: Displays the response
 ```
 
-## Composants
+## Components
 
-| Composant | Rôle |
+| Component | Role |
 | --- | --- |
-| `DocumentIngestor` | Parse les PDF, les découpe en segments de 2 000 caractères avec un chevauchement de 200, puis indexe leurs embeddings. |
-| `ChatService` | Initialise l'assistant et fournit l'interface de chat en ligne de commande. |
-| Qdrant | Stocke les embeddings et retrouve les segments les plus proches. |
-| `ChatTools` | Expose les dates de mise à jour des documents de politique et conditions. |
+| `DocumentIngestor` | Parses PDFs, splits them into 2,000-character chunks with 200-character overlap, then indexes their embeddings. |
+| `ChatService` | Initializes the assistant and provides the command-line chat interface. |
+| Qdrant | Stores embeddings and retrieves the nearest chunks. |
+| `ChatTools` | Exposes the last-updated dates of policy and terms documents. |
