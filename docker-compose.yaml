@@ -2,6 +2,9 @@ services:
   infinispan:
     image: quay.io/infinispan/server:15.2
     command: -c infinispan.xml -b 0.0.0.0
+    user: "0"
+    profiles:
+      - infinispan
     ports:
       - 11222:11222
     volumes:
@@ -10,13 +13,34 @@ services:
 
   ollama:
     image: docker.io/ollama/ollama:latest
+    profiles:
+      - ollama
     ports:
       - 11434:11434
     volumes:
       - ollama_data:/root/.ollama
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  ollama-model:
+    image: docker.io/ollama/ollama:latest
+    profiles:
+      - ollama
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    entrypoint: ["ollama"]
+    command: ["pull", "${OLLAMA_MODEL:-qwen3:8b}"]
 
   qdrant:
     image: docker.io/qdrant/qdrant:v1.14.1
+    profiles:
+      - qdrant
     ports:
       - 6333:6333
       - 6334:6334

@@ -13,22 +13,36 @@ retrieve the last-updated date of specific documents.
 
 ## Getting started
 
-1. Start Ollama and the vector store you select:
+1. Start the vector store you select:
+
+   **Qdrant (default):**
 
    ```bash
-   docker compose up -d ollama qdrant
+   docker compose --profile qdrant up -d
    ```
 
-   To use Infinispan instead of Qdrant, start its service:
+   **Infinispan:**
 
    ```bash
-   docker compose up -d ollama infinispan
+   docker compose --profile infinispan up -d
    ```
 
    Its administration dashboard is available at
    [`http://localhost:11222/console/`](http://localhost:11222/console/) without a login.
    This configuration is intended for local development only: do not expose port `11222`
    on an untrusted network.
+
+   Start Ollama only when you use the local chat model:
+
+   ```bash
+   docker compose --profile ollama up -d
+   ```
+
+   To start Qdrant and Ollama together:
+
+   ```bash
+   docker compose --profile qdrant --profile ollama up -d
+   ```
 
    Set the same vector store for ingestion and chat. For example:
 
@@ -39,10 +53,11 @@ retrieve the last-updated date of specific documents.
    After changing the provider, run ingestion again because Qdrant and Infinispan store
    separate vector indexes.
 
-2. Pull the default local chat model:
+2. The `ollama-model` service automatically downloads `qwen3:8b` the first time the
+   Ollama profile starts. Follow its progress with:
 
    ```bash
-   docker compose exec ollama ollama pull qwen3:8b
+   docker compose logs -f ollama-model
    ```
 
    To use OpenAI instead, set `CHAT_MODEL_PROVIDER=openai` and `OPENAI_API_KEY` before
@@ -78,6 +93,47 @@ retrieve the last-updated date of specific documents.
 | `QDRANT_URL` | `http://localhost:6334` | Qdrant gRPC endpoint when `EMBEDDING_STORE_PROVIDER=qdrant`. |
 | `INFINISPAN_HOST` | `localhost` | Infinispan Hot Rod host when `EMBEDDING_STORE_PROVIDER=infinispan`. |
 | `INFINISPAN_PORT` | `11222` | Infinispan Hot Rod port when `EMBEDDING_STORE_PROVIDER=infinispan`. |
+
+## Ollama API
+
+Ollama exposes a REST API at `http://localhost:11434`; it does not include a built-in
+web console. You can inspect its installed models with:
+
+```bash
+curl http://localhost:11434/api/tags
+```
+
+Generate a response:
+
+```bash
+curl http://localhost:11434/api/generate \
+  -H "Content-Type: application/json" \
+  -d '{"model":"qwen3:8b","prompt":"Explain RAG in one sentence.","stream":false}'
+```
+
+Chat with the model:
+
+```bash
+curl http://localhost:11434/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen3:8b",
+    "messages": [{"role": "user", "content": "Explain RAG in one sentence."}],
+    "stream": false
+  }'
+```
+
+Create embeddings:
+
+```bash
+# Download an embedding model once:
+docker compose exec ollama ollama pull nomic-embed-text
+
+curl http://localhost:11434/api/embed \
+  -H "Content-Type: application/json" \
+  -d '{"model":"nomic-embed-text","input":"A document segment to embed."}'
+```
+
 ## RAG sequence with tools
 
 ```mermaid
