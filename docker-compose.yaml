@@ -1,4 +1,13 @@
 services:
+  infinispan:
+    image: quay.io/infinispan/server:15.2
+    command: -c infinispan.xml -b 0.0.0.0
+    ports:
+      - 11222:11222
+    volumes:
+      - ./infinispan.xml:/opt/infinispan/server/conf/infinispan.xml:ro
+      - infinispan_data:/opt/infinispan/server/data
+
   ollama:
     image: docker.io/ollama/ollama:latest
     ports:
@@ -15,5 +24,6 @@ services:
       - qdrant_storage:/qdrant/storage
 
 volumes:
+  infinispan_data:
   ollama_data:
   qdrant_storage:

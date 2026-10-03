@@ -13,11 +13,31 @@ retrieve the last-updated date of specific documents.
 
 ## Getting started
 
-1. Start Qdrant and Ollama:
+1. Start Ollama and the vector store you select:
 
    ```bash
-   docker compose up -d qdrant ollama
+   docker compose up -d ollama qdrant
    ```
+
+   To use Infinispan instead of Qdrant, start its service:
+
+   ```bash
+   docker compose up -d ollama infinispan
+   ```
+
+   Its administration dashboard is available at
+   [`http://localhost:11222/console/`](http://localhost:11222/console/) without a login.
+   This configuration is intended for local development only: do not expose port `11222`
+   on an untrusted network.
+
+   Set the same vector store for ingestion and chat. For example:
+
+   ```bash
+   export EMBEDDING_STORE_PROVIDER=infinispan
+   ```
+
+   After changing the provider, run ingestion again because Qdrant and Infinispan store
+   separate vector indexes.
 
 2. Pull the default local chat model:
 
@@ -54,6 +74,10 @@ retrieve the last-updated date of specific documents.
 | `OLLAMA_MODEL` | `qwen3:8b` | Pulled Ollama chat model to use. The model must support tool calling. |
 | `OPENAI_API_KEY` | Required for `openai` | OpenAI API key. |
 | `OPENAI_MODEL` | `gpt-4.1` | OpenAI chat model to use when `CHAT_MODEL_PROVIDER=openai`. |
+| `EMBEDDING_STORE_PROVIDER` | `qdrant` | Vector store provider: `qdrant` or `infinispan`. |
+| `QDRANT_URL` | `http://localhost:6334` | Qdrant gRPC endpoint when `EMBEDDING_STORE_PROVIDER=qdrant`. |
+| `INFINISPAN_HOST` | `localhost` | Infinispan Hot Rod host when `EMBEDDING_STORE_PROVIDER=infinispan`. |
+| `INFINISPAN_PORT` | `11222` | Infinispan Hot Rod port when `EMBEDDING_STORE_PROVIDER=infinispan`. |
 ## RAG sequence with tools
 
 ```mermaid

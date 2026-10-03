@@ -9,34 +9,27 @@ import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.model.embedding.EmbeddingModel;
 import dev.langchain4j.model.embedding.onnx.allminilml6v2.AllMiniLmL6V2EmbeddingModel;
 import dev.langchain4j.store.embedding.EmbeddingStore;
-import dev.langchain4j.store.embedding.qdrant.QdrantEmbeddingStore;
-import io.qdrant.client.QdrantClient;
-import io.qdrant.client.QdrantGrpcClient;
-import io.qdrant.client.grpc.Collections;
+import me.akkhalef.store.EmbeddingStoreFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
 
 public class DocumentIngestor {
 
     private static final Logger logger = LoggerFactory.getLogger(DocumentIngestor.class);
-    private static final String INDEX_NAME = "VintageStoreIndex";
-    private static final String QDRANT_URL = "http://localhost:6334";
     private static final EmbeddingModel embeddingModel = new AllMiniLmL6V2EmbeddingModel();
     private static EmbeddingStore<TextSegment> embeddingStore;
 
-    public static void main(String[] args) throws IOException, URISyntaxException, ExecutionException, InterruptedException {
+    public static void main(String[] args) throws IOException, URISyntaxException {
         logger.info("Starting Document Ingestor...");
         embeddingStore = createEmbeddingStore();
 
@@ -77,27 +70,8 @@ public class DocumentIngestor {
         return pdfFiles;
     }
 
-
-    private static EmbeddingStore<TextSegment> createEmbeddingStore() throws URISyntaxException, ExecutionException, InterruptedException {
-        String qdrantHostname = new URI(QDRANT_URL).getHost();
-        int qdrantPort = new URI(QDRANT_URL).getPort();
-
-        QdrantGrpcClient.Builder clientBuilder = QdrantGrpcClient.newBuilder(qdrantHostname, qdrantPort, false);
-        QdrantClient qdrantClient = new QdrantClient(clientBuilder.build());
-
-        qdrantClient.createCollectionAsync(INDEX_NAME,
-                        Collections.VectorParams.newBuilder()
-                                .setSize(384)
-                                .setDistance(Collections.Distance.Cosine)
-                                .build()
-                )
-                .get();
-
-
-        return QdrantEmbeddingStore.builder()
-                .client(qdrantClient)
-                .collectionName(INDEX_NAME)
-                .build();
+    private static EmbeddingStore<TextSegment> createEmbeddingStore() throws URISyntaxException {
+        return EmbeddingStoreFactory.create();
     }
 
 }

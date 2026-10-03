@@ -11,15 +11,12 @@ import dev.langchain4j.rag.content.retriever.ContentRetriever;
 import dev.langchain4j.rag.content.retriever.EmbeddingStoreContentRetriever;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
-import dev.langchain4j.store.embedding.qdrant.QdrantEmbeddingStore;
-import io.qdrant.client.QdrantClient;
-import io.qdrant.client.QdrantGrpcClient;
 import me.akkhalef.assistant.ChatAssistant;
+import me.akkhalef.store.EmbeddingStoreFactory;
 import me.akkhalef.tool.ChatTools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.Scanner;
@@ -27,8 +24,6 @@ import java.util.Scanner;
 public class ChatService {
 
     private static final Logger log = LoggerFactory.getLogger(ChatService.class);
-    private static final String INDEX_NAME = "VintageStoreIndex";
-    private static final String QDRANT_URL = "http://localhost:6334";
     private static final String CHAT_MODEL_PROVIDER =
             environmentOrDefault("CHAT_MODEL_PROVIDER", "ollama").toLowerCase(Locale.ROOT);
     private static final String OLLAMA_BASE_URL = environmentOrDefault("OLLAMA_BASE_URL", "http://localhost:11434");
@@ -85,15 +80,7 @@ public class ChatService {
     }
 
     private static EmbeddingStore<TextSegment> embeddingStore() throws URISyntaxException {
-        String qdrantHostname = new URI(QDRANT_URL).getHost();
-        int qdrantPort = new URI(QDRANT_URL).getPort();
-
-        QdrantGrpcClient.Builder grpcClientBuilder = QdrantGrpcClient.newBuilder(qdrantHostname, qdrantPort, false);
-        QdrantClient qdrantClient = new QdrantClient(grpcClientBuilder.build());
-        return QdrantEmbeddingStore.builder()
-                .client(qdrantClient)
-                .collectionName(INDEX_NAME)
-                .build();
+        return EmbeddingStoreFactory.create();
     }
 
     private static String environmentOrDefault(String name, String defaultValue) {
