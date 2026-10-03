@@ -70,7 +70,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>${version.exec.plugin}</version>
                 <configuration>
-                    <mainClass>org.agoncal.fascicle.langchain4j.puttingtogether.ChatService</mainClass>
+                    <mainClass>me.akkhalef.service.ChatService</mainClass>
                 </configuration>
             </plugin>
         </plugins>
