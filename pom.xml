@@ -12,6 +12,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>21</maven.compiler.release>
         <version.langchain4j>1.12.2</version.langchain4j>
+        <version.junit>5.11.4</version.junit>
         <version.tinylog>2.7.0</version.tinylog>
         <version.exec.plugin>3.6.3</version.exec.plugin>
     </properties>
@@ -35,6 +36,10 @@
         </dependency>
         <dependency>
             <groupId>dev.langchain4j</groupId>
+            <artifactId>langchain4j-ollama</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-open-ai</artifactId>
         </dependency>
         <dependency>
@@ -48,6 +53,12 @@
         <dependency>
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-qdrant</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${version.junit}</version>
+            <scope>test</scope>
         </dependency>
         <!-- Other -->
         <dependency>

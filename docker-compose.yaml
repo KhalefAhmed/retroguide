@@ -1,4 +1,11 @@
 services:
+  ollama:
+    image: docker.io/ollama/ollama:latest
+    ports:
+      - 11434:11434
+    volumes:
+      - ollama_data:/root/.ollama
+
   qdrant:
     image: docker.io/qdrant/qdrant:v1.14.1
     ports:
@@ -8,4 +15,5 @@ services:
       - qdrant_storage:/qdrant/storage
 
 volumes:
+  ollama_data:
   qdrant_storage:
