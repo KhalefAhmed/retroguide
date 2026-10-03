@@ -1,0 +1,77 @@
+{
+  "model": "gpt-4.1",
+  "messages": [
+    {
+      "role": "system",
+      "content": "You are an expert of the company Vintage Store.\nFocus on the customer and answer the questions.\nKeep your answers short and to the point.\nIf you don't know the answer, say 'I don't know'.\n"
+    },
+    {
+      "role": "user",
+      "content": "Here is my question: My name is Khalil and I would like to know the terms and conditions of the company\n\nAnswer using the following information:\nthe App Distributors are third-party beneficiaries of the terms and conditions in this mobile application licence\ncontained in these Legal Terms, and that each App Distributor will have the right (and will be deemed to have\naccepted the right) to enforce the terms and conditions in this mobile application licence contained in these Legal\nTerms against you as a third-party beneficiary thereof.\n13. SOCIAL MEDIA\nAs part of the functionality of the Services, you may link your account with online accounts you have with third-\nparty service providers (each such account, a 'Third-Party Account') by either: (1) providing your Third-Party\nAccount login information through the Services; or (2) allowing us to access your Third-Party Account, as is\npermitted under the applicable terms and conditions that govern your use of each Third-Party Account. You\nrepresent and warrant that you are entitled to disclose your Third-Party Account login information to us and/or\ngrant us access to your Third-Party Account, without breach by you of any of the terms and conditions that\ngovern your use of the applicable Third-Party Account, and without obligating us to pay any fees or making us\nsubject to any usage limitations imposed by the third-party service provider of the Third-Party Account. By\ngranting us access to any Third-Party Accounts, you understand that (1) we may access, make available, and\nstore (if applicable) any content that you have provided to and stored in your Third-Party Account (the 'Social\nNetwork Content') so that it is available on and through the Services via your account, including without limitation\nany friend lists and (2) we may submit to and receive from your Third-Party Account additional information to the\nextent you are notified when you link your account with the Third-Party Account. Depending on the Third-Party\nAccounts you choose and subject to the privacy settings that you have set in such Third-Party Accounts,\n\n11. CONTACT INFORMATION\nFor general inquiries, complaints, questions or claims concerning the Licensed Application, please contact:\n       \n__________\n__________\n__________, __________ __________\n__________\n__________\n12. TERMINATION\nThe license is valid until terminated by __________ or by You. Your rights under this license will terminate\nautomatically and without notice from __________ if You fail to adhere to any term(s) of this license. Upon\nLicense termination, You shall stop all use of the Licensed Application, and destroy all copies, full or partial, of the\nLicensed Application.\n      \n13. THIRD-PARTY TERMS OF AGREEMENTS AND BENEFICIARY\n__________ represents and warrants that __________ will comply with applicable third-party terms of agreement\nwhen using Licensed Application.\nIn Accordance with Section 9 of the \"Instructions for Minimum Terms of Developer's End-User License\nAgreement,\" subsidiaries shall be third-party beneficiaries of this End User License Agreement and — upon Your\nacceptance of the terms and conditions of this License Agreement, will have the right (and will be deemed to\nhave accepted the right) to enforce this End User License Agreement against You as a third-party beneficiary\nthereof.\n14. INTELLECTUAL PROPERTY RIGHTS\n__________ and the End-User acknowledge that, in the event of any third-party claim that the Licensed\nApplication or the End-User's possession and use of that Licensed Application infringes on the third party's\nintellectual property rights, __________, and not the Services, will be solely responsible for the investigation,\ndefense, settlement, and discharge or any such intellectual property infringement claims.\n15. APPLICABLE LAW\nThis License Agreement is governed by the laws of __________ excluding its conflicts of law rules.\n16. MISCELLANEOUS\n16.1  If any of the terms of this agreement should be or become invalid, the validity of the remaining provisions"
+    }
+  ],
+  "temperature": 0.3,
+  "stream": false,
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "lastUpdateEndOfUserLicenseAgreement",
+        "description": "Returns the last time the END USER LICENSE AGREEMENT document was updated",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "lastUpdateAcceptableUsePolicy",
+        "description": "Returns the last time the ACCEPTABLE USE POLICY document was updated",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "lastUpdateDisclaimer",
+        "description": "Returns the last time the DISCLAIMER document was updated",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "lastUpdatePrivacy",
+        "description": "Returns the last time the PRIVACY document was updated",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "lastUpdateTerms",
+        "description": "Returns the last time the TERMS AND CONDITIONS document was updated",
+        "parameters": {
+          "type": "object",
+          "properties": {},
+          "required": []
+        }
+      }
+    }
+  ]
+}

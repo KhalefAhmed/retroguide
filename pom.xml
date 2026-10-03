@@ -75,4 +75,24 @@
             </plugin>
         </plugins>
     </build>
+
+    <!-- Profiles -->
+
+    <profiles>
+        <profile>
+            <id>ingest</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${version.exec.plugin}</version>
+                        <configuration>
+                            <mainClass>me.akkhalef.document.DocumentIngestor</mainClass>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

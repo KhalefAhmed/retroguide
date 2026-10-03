@@ -59,7 +59,7 @@ public class DocumentIngestor {
         }
 
         List<Embedding> embeddings = embeddingModel.embedAll(segments).content();
-        embeddingStore.addAll(embeddings);
+        embeddingStore.addAll(embeddings, segments);
 
     }
 
