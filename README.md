@@ -53,7 +53,7 @@ retrieve the last-updated date of specific documents.
    After changing the provider, run ingestion again because Qdrant and Infinispan store
    separate vector indexes.
 
-2. The `ollama-model` service automatically downloads `qwen3:4b` the first time the
+2. The `ollama-model` service automatically downloads `llama3.2:3b` the first time the
    Ollama profile starts. Follow its progress with:
 
    ```bash
@@ -86,7 +86,7 @@ retrieve the last-updated date of specific documents.
 | --- | --- | --- |
 | `CHAT_MODEL_PROVIDER` | `ollama` | Chat model provider: `ollama` or `openai`. |
 | `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama server URL. |
-| `OLLAMA_MODEL` | `qwen3:4b` | Pulled Ollama chat model to use. The model must support tool calling. |
+| `OLLAMA_MODEL` | `llama3.2:3b` | Pulled Ollama chat model to use. The model must support tool calling. |
 | `OLLAMA_MAX_TOKENS` | `256` | Maximum number of response tokens from Ollama. |
 | `OLLAMA_TIMEOUT_SECONDS` | `300` | Ollama request timeout in seconds. |
 | `OPENAI_API_KEY` | Required for `openai` | OpenAI API key. |
@@ -110,7 +110,7 @@ Generate a response:
 ```bash
 curl http://localhost:11434/api/generate \
   -H "Content-Type: application/json" \
-  -d '{"model":"qwen3:4b","prompt":"Explain RAG in one sentence.","stream":false}'
+  -d '{"model":"llama3.2:3b","prompt":"Explain RAG in one sentence.","stream":false}'
 ```
 
 Chat with the model:
@@ -119,7 +119,7 @@ Chat with the model:
 curl http://localhost:11434/api/chat \
   -H "Content-Type: application/json" \
   -d '{
-    "model": "qwen3:4b",
+    "model": "llama3.2:3b",
     "messages": [{"role": "user", "content": "Explain RAG in one sentence."}],
     "stream": false
   }'
@@ -146,7 +146,7 @@ sequenceDiagram
     participant RAG as LangChain4j<br/>ContentRetriever
     participant Embed as all-MiniLM-L6-v2
     participant Qdrant as Qdrant<br/>VintageStoreIndex
-    participant LLM as Ollama<br/>qwen3:4b
+    participant LLM as Ollama<br/>llama3.2:3b
     participant Tool as ChatTools
 
     User->>Chat: Asks a question

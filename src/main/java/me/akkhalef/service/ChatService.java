@@ -28,7 +28,7 @@ public class ChatService {
     private static final String CHAT_MODEL_PROVIDER =
             environmentOrDefault("CHAT_MODEL_PROVIDER", "ollama").toLowerCase(Locale.ROOT);
     private static final String OLLAMA_BASE_URL = environmentOrDefault("OLLAMA_BASE_URL", "http://localhost:11434");
-    private static final String OLLAMA_MODEL = environmentOrDefault("OLLAMA_MODEL", "qwen3:4b");
+    private static final String OLLAMA_MODEL = environmentOrDefault("OLLAMA_MODEL", "llama3.2:3b");
     private static final int OLLAMA_MAX_TOKENS = Integer.parseInt(environmentOrDefault("OLLAMA_MAX_TOKENS", "256"));
     private static final int OLLAMA_TIMEOUT_SECONDS =
             Integer.parseInt(environmentOrDefault("OLLAMA_TIMEOUT_SECONDS", "300"));

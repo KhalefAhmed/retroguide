@@ -35,7 +35,7 @@ services:
     environment:
       OLLAMA_HOST: http://ollama:11434
     entrypoint: ["ollama"]
-    command: ["pull", "${OLLAMA_MODEL:-qwen3:4b}"]
+    command: ["pull", "${OLLAMA_MODEL:-llama3.2:3b}"]
 
   qdrant:
     image: docker.io/qdrant/qdrant:v1.14.1
