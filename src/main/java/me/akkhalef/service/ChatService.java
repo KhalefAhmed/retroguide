@@ -76,11 +76,15 @@ public class ChatService {
                     .returnThinking(false)
                     .timeout(Duration.ofSeconds(OLLAMA_TIMEOUT_SECONDS))
                     .maxRetries(0)
+                    .logResponses(true)
+                    .logRequests(true)
                     .build();
             case "openai" -> OpenAiChatModel.builder()
                     .apiKey(requiredEnvironment())
                     .modelName(OPENAI_MODEL)
                     .temperature(0.3)
+                    .logResponses(true)
+                    .logRequests(true)
                     .build();
             default -> throw new IllegalStateException(
                     "CHAT_MODEL_PROVIDER must be either 'ollama' or 'openai', but was '%s'"
