@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URISyntaxException;
+import java.time.Duration;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -27,7 +28,10 @@ public class ChatService {
     private static final String CHAT_MODEL_PROVIDER =
             environmentOrDefault("CHAT_MODEL_PROVIDER", "ollama").toLowerCase(Locale.ROOT);
     private static final String OLLAMA_BASE_URL = environmentOrDefault("OLLAMA_BASE_URL", "http://localhost:11434");
-    private static final String OLLAMA_MODEL = environmentOrDefault("OLLAMA_MODEL", "qwen3:8b");
+    private static final String OLLAMA_MODEL = environmentOrDefault("OLLAMA_MODEL", "qwen3:4b");
+    private static final int OLLAMA_MAX_TOKENS = Integer.parseInt(environmentOrDefault("OLLAMA_MAX_TOKENS", "256"));
+    private static final int OLLAMA_TIMEOUT_SECONDS =
+            Integer.parseInt(environmentOrDefault("OLLAMA_TIMEOUT_SECONDS", "300"));
     private static final String OPENAI_MODEL = environmentOrDefault("OPENAI_MODEL", "gpt-4.1");
     public static void main(String[] args) throws Exception {
         EmbeddingStore<TextSegment> embeddingStore = embeddingStore();
@@ -67,6 +71,11 @@ public class ChatService {
                     .baseUrl(OLLAMA_BASE_URL)
                     .modelName(OLLAMA_MODEL)
                     .temperature(0.3)
+                    .numPredict(OLLAMA_MAX_TOKENS)
+                    .think(false)
+                    .returnThinking(false)
+                    .timeout(Duration.ofSeconds(OLLAMA_TIMEOUT_SECONDS))
+                    .maxRetries(0)
                     .build();
             case "openai" -> OpenAiChatModel.builder()
                     .apiKey(requiredEnvironment())

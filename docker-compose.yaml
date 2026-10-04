@@ -1,6 +1,6 @@
 services:
   infinispan:
-    image: quay.io/infinispan/server:15.2
+    image: quay.io/infinispan/server:16.0
     command: -c infinispan.xml -b 0.0.0.0
     user: "0"
     profiles:
@@ -35,7 +35,7 @@ services:
     environment:
       OLLAMA_HOST: http://ollama:11434
     entrypoint: ["ollama"]
-    command: ["pull", "${OLLAMA_MODEL:-qwen3:8b}"]
+    command: ["pull", "${OLLAMA_MODEL:-qwen3:4b}"]
 
   qdrant:
     image: docker.io/qdrant/qdrant:v1.14.1
